@@ -155,8 +155,50 @@ Additional targeted coverage: selected XLSX sheet, leading-zero IDs, Windows-125
 - Confirm expected file sizes/row counts and representative hardware before setting supported upload limits or performance targets; measure the supplied demo rather than promise unspecified scale.
 - The baseline has operator/admin workflows but no authentication, role enforcement, multi-user server, or production security-hardening commitment. Profiles are managed locally.
 - Exclude legacy `.xls`, macro execution, ERP integration, inventory accounting, production hosting, maintenance, advanced integrations, and unrelated portfolio dependencies.
-- Scheduling and production commitments need separate agreement. Implement phases in dependency order; estimate effort after validating the open business rules.
+- The authorized demo schedule is November 15-28, 2026, as detailed below. Production commitments need separate agreement; revise the schedule if validation reveals material scope changes.
 
 ## 7. Immediate repository milestone
 
 Publish the reviewed `requirements.md` and this `plan.md` under `nexoradev1221/excel_csv_automation`, then begin application work only when requested. Repository creation and publication require an authenticated account with permission to create repositories for that owner.
+
+## 8. Authorized development schedule
+
+Planning date: November 14, 2026. Implementation window: **November 15-28, 2026 (14 calendar days)**. All dates use **Asia/Vladivostok (UTC+10)**. No application implementation is authorized for the planning session on November 14.
+
+This is a dated work plan, not an installed background automation. No future coding runs or reminders have been scheduled by a tool. Each work session must be started manually until a suitable execution scheduler is configured. Dates are targets, not claims of completed work; record actual progress and blockers honestly.
+
+| Day | Date | Planned work | Branch / completion evidence |
+| --- | --- | --- | --- |
+| 1 | Nov 15 | Confirm demo defaults; package layout, dependency setup, ignores, and test workflow. | `chore/project-foundation`; install and startup checks. |
+| 2 | Nov 16 | Typed data contracts, synthetic input generator, six branch fixtures, independent expected-results manifest. | `feat/demo-dataset`; fixture validation. |
+| 3 | Nov 17 | CSV parsing with delimiter/encoding settings and source-row provenance. | `feat/file-import`; CSV and encoding tests. |
+| 4 | Nov 18 | XLSX sheet selection, header preview, and clear file-level errors. | Continue `feat/file-import`; XLSX import tests and PR completion. |
+| 5 | Nov 19 | Column mapping and versioned local profile persistence. | `feat/mapping-profiles`; mapping/profile round-trip tests. |
+| 6 | Nov 20 | Required-field validation, date/number parsing, and rejected-row reasons. | `feat/validation`; invalid-row and missing-column tests. |
+| 7 | Nov 21 | Configurable duplicate keys, stable retention order, and conflict reporting. | `feat/deduplication`; AT-02 checks. |
+| 8 | Nov 22 | Decimal calculations, branch/month summaries, pipeline counts, reconciliation. | `feat/reconciliation`; AT-03/AT-04 checks. |
+| 9 | Nov 23 | Formatted workbook, exception CSV, run metadata, literal-text export handling. | `feat/report-exports`; reopened-output checks. |
+| 10 | Nov 24 | Russian UI: uploads, settings, preview, mapping, and profile reuse. | `feat/operator-ui`; first runnable operator flow. |
+| 11 | Nov 25 | UI processing stages, results, exception review, downloads, and recoverable errors. | Continue `feat/operator-ui`; six-file workflow verification. |
+| 12 | Nov 26 | End-to-end acceptance run, edge cases, integration fixes, and regression coverage. | Focused `fix/<issue>` branches as needed; AT-01 through AT-04 evidence. |
+| 13 | Nov 27 | Clean setup verification, English README, Russian operator guidance, real screenshots. | `docs/demo-handover`; verified setup and captured application evidence. |
+| 14 | Nov 28 | Final acceptance/reconciliation review, source/data review, remaining defect fixes, release notes. | Final PRs; tag `v0.1.0` only after all exit criteria pass. |
+
+Work proceeds in dependency order. If a prerequisite is incomplete, resolve it before starting dependent work and update this table with the revised dates. Do not silently reduce the required deliverables to meet the target date. Additional time may be proposed within the user's 7-30 day range; report any revision and its reason.
+
+## 9. Git branching, commits, and pushes
+
+Use GitHub Flow: a stable `main`, short-lived task branches, pull requests, relevant checks, and merges after review. A permanent `develop` branch is unnecessary for this single demo product.
+
+1. Start each work session by reading repository instructions, checking local changes, and fetching remote branches. Preserve unrelated user changes; do not reset or overwrite them.
+2. Create each new branch from up-to-date `main`, for example `feat/file-import`, `fix/csv-row-provenance`, `test/duplicate-conflicts`, or `docs/operator-guide`. Continue an existing task branch if its work is still in progress.
+3. Split work into small, coherent, reviewable changes. Examples include a parser plus its behavior tests, a profile persistence feature, a localized UI step, a demonstrated regression fix, or documentation for a completed workflow.
+4. Use descriptive Conventional Commit-style messages such as `feat(import): support Windows-1251 CSV files`, `test(dedup): cover conflicting transaction keys`, and `fix(export): preserve literal formula-like identifiers`. Do not create empty commits, cosmetic churn, artificially split trivial edits, or fake activity to inflate the count.
+5. Run checks appropriate to each change before committing. A feature may include its tests in the same commit; commit subsequent test improvements and fixes separately when they represent meaningful work. Do not knowingly present failing checks as passing.
+6. Push after each meaningful verified commit when practical, and at least at the end of every work session containing changes. Use `git push -u origin <branch>` for the first push. Do not expose credentials, local operator files, or temporary reports.
+7. Open a PR when there is concrete work to review; use a draft PR for unfinished multi-day features. Describe the resulting behavior, requirement coverage, checks run, and any limitations. Small independent features should use separate PRs.
+8. Before merging, confirm relevant checks pass, review the diff, and ensure no required work remains on that PR. Prefer a merge commit to preserve the individual meaningful commits requested by the user. Verify `main` afterward; fix failures promptly on a new branch.
+9. Keep published history intact. Do not force-push, backdate commits, or rewrite `main`. Resolve branch divergence with ordinary merges where needed. Repository branch protections are a separate optional account configuration; this plan does not claim they are enabled.
+10. At session end, record completed tasks, checks, commit/PR links, blockers, and the next task in a progress log. Dates and commit counts must reflect real work. No fixed commit quota is required: maximize useful, reviewable progress.
+
+The current planning change follows the same workflow on `docs/implementation-schedule`. Only planning documentation changes in this session; application source, dependency setup, fixtures, and tests begin during the implementation window after a work session is started.
