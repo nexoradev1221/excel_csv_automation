@@ -16,7 +16,13 @@
 - Commits: [f7d9c15](https://github.com/nexoradev1221/excel_csv_automation/commit/f7d9c15)
   (package/shell) and [c488535](https://github.com/nexoradev1221/excel_csv_automation/commit/c488535)
   (CI); both pushed. Review/CI: [PR #2](https://github.com/nexoradev1221/excel_csv_automation/pull/2).
-- Final merge/CI outcome is recorded below after GitHub checks finish.
+- Windows and Linux CI both passed for commit `9a57000` in
+  [run 43689248097](https://github.com/nexoradev1221/excel_csv_automation/actions/runs/43689248097).
+- A real subprocess launch through `python -m excel_csv_automation` returned HTTP 200 from
+  the localhost health endpoint; the test-owned server was stopped afterward.
+- Day 1 foundation deliverables are complete. PR #2 is the canonical merge/check record;
+  this final progress-only update will also pass CI before merge. No processing features
+  or acceptance-test completion are claimed yet.
 
 Next: Day 2 typed contracts, six synthetic branch fixtures, and independently specified
 expected results, then CSV/XLSX imports in dependency order. No current business-rule blocker.
