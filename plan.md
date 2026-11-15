@@ -1,6 +1,6 @@
 # Implementation Plan: Excel and CSV Processing Automation
 
-Status: planning only; application implementation has not started.  
+Status: implementation started November 15, 2026; see progress.md for verified results.  
 Requirements: `requirements.md`, DEMO-SRS-01, version 1.0 (2026-11-14).  
 Target repository: `nexoradev1221/excel_csv_automation`.
 
@@ -8,7 +8,7 @@ Target repository: `nexoradev1221/excel_csv_automation`.
 
 The product must let an office operator consolidate six branches' weekly files into an auditable monthly sales workbook without changing code. The main risks are incorrectly parsing source values, counting duplicate transactions, and producing summaries that disagree with accepted detail rows.
 
-The baseline covers XLSX/CSV import, reusable column mappings, validation, duplicate detection, calculation, summaries, exports, and visible processing results. It also includes synthetic demo inputs, automated tests, actual application screenshots, and documentation. This plan describes future implementation; it does not claim those deliverables already exist.
+The baseline covers XLSX/CSV import, reusable column mappings, validation, duplicate detection, calculation, summaries, exports, and visible processing results. It also includes synthetic demo inputs, automated tests, actual application screenshots, and documentation. This plan describes the complete target implementation; progress.md distinguishes delivered work from remaining deliverables.
 
 The background mentions returns and inventory, but the specified canonical fields and acceptance tests define a transaction consolidation workflow. Inventory balance calculations, stock reconciliation, and a separate returns subsystem are outside the baseline. Signed quantities can represent returns under the provisional rules below.
 
@@ -165,7 +165,7 @@ Publish the reviewed `requirements.md` and this `plan.md` under `nexoradev1221/e
 
 Planning date: November 14, 2026. Implementation window: **November 15-28, 2026 (14 calendar days)**. All dates use **Asia/Vladivostok (UTC+10)**. No application implementation is authorized for the planning session on November 14.
 
-This is a dated work plan, not an installed background automation. No future coding runs or reminders have been scheduled by a tool. Each work session must be started manually until a suitable execution scheduler is configured. Dates are targets, not claims of completed work; record actual progress and blockers honestly.
+A daily project implementation heartbeat is active in the app for this window (automation ID: implement-excel-csv-automation-14-days). Local execution requires the computer to remain on and the app running. Runs are subject to sandbox, network, and authentication availability; report concrete blockers rather than claiming unattended success. Dates are targets, not claims of completed work; record actual progress and blockers honestly.
 
 | Day | Date | Planned work | Branch / completion evidence |
 | --- | --- | --- | --- |
@@ -201,4 +201,4 @@ Use GitHub Flow: a stable `main`, short-lived task branches, pull requests, rele
 9. Keep published history intact. Do not force-push, backdate commits, or rewrite `main`. Resolve branch divergence with ordinary merges where needed. Repository branch protections are a separate optional account configuration; this plan does not claim they are enabled.
 10. At session end, record completed tasks, checks, commit/PR links, blockers, and the next task in a progress log. Dates and commit counts must reflect real work. No fixed commit quota is required: maximize useful, reviewable progress.
 
-The current planning change follows the same workflow on `docs/implementation-schedule`. Only planning documentation changes in this session; application source, dependency setup, fixtures, and tests begin during the implementation window after a work session is started.
+The initial schedule was published on `docs/implementation-schedule` in PR #1 and merged before implementation. Day 1 work uses `chore/project-foundation`; later branches and verification are recorded in progress.md.
