@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "profile_id": "russian_csv",
+  "column_map": {
+    "date": "Дата",
+    "branch": "Филиал",
+    "sku": "Артикул",
+    "quantity": "Количество",
+    "unit_price": "Цена",
+    "transaction_id": "Номер"
+  },
+  "csv_delimiter": ";",
+  "csv_encoding": "cp1251",
+  "date_format": "%d.%m.%Y",
+  "decimal_separator": ",",
+  "sheet_name": null,
+  "duplicate_key": [
+    "branch",
+    "transaction_id"
+  ],
+  "quantity_decimal_places": 3,
+  "price_decimal_places": 4
+}

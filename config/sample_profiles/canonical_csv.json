@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "profile_id": "canonical_csv",
+  "column_map": {
+    "date": "date",
+    "branch": "branch",
+    "sku": "sku",
+    "quantity": "quantity",
+    "unit_price": "unit_price",
+    "transaction_id": "transaction_id"
+  },
+  "csv_delimiter": ",",
+  "csv_encoding": "utf-8",
+  "date_format": "%Y-%m-%d",
+  "decimal_separator": ".",
+  "sheet_name": null,
+  "duplicate_key": [
+    "branch",
+    "transaction_id"
+  ],
+  "quantity_decimal_places": 3,
+  "price_decimal_places": 4
+}
