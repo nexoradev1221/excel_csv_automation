@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "profile_id": "alias_csv",
+  "column_map": {
+    "date": "Date",
+    "branch": "Office",
+    "sku": "Product",
+    "quantity": "Units",
+    "unit_price": "Price",
+    "transaction_id": "Txn"
+  },
+  "csv_delimiter": "|",
+  "csv_encoding": "utf-8-sig",
+  "date_format": "%Y-%m-%d",
+  "decimal_separator": ".",
+  "sheet_name": null,
+  "duplicate_key": [
+    "branch",
+    "transaction_id"
+  ],
+  "quantity_decimal_places": 3,
+  "price_decimal_places": 4
+}

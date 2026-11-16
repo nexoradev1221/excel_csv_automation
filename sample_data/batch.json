@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "filename": "01_north.xlsx",
+      "profile_id": "canonical_xlsx",
+      "branch": "Север"
+    },
+    {
+      "filename": "02_south.csv",
+      "profile_id": "russian_csv",
+      "branch": "Юг"
+    },
+    {
+      "filename": "03_east.xlsx",
+      "profile_id": "alias_xlsx",
+      "branch": "Восток"
+    },
+    {
+      "filename": "04_west.csv",
+      "profile_id": "alias_csv",
+      "branch": "Запад"
+    },
+    {
+      "filename": "05_center.xlsx",
+      "profile_id": "canonical_xlsx",
+      "branch": "Центр"
+    },
+    {
+      "filename": "06_port.csv",
+      "profile_id": "canonical_csv",
+      "branch": "Порт"
+    }
+  ]
+}
