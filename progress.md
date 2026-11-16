@@ -26,3 +26,30 @@
 
 Next: Day 2 typed contracts, six synthetic branch fixtures, and independently specified
 expected results, then CSV/XLSX imports in dependency order. No current business-rule blocker.
+
+## November 16, 2026 — Day 2 (Asia/Vladivostok)
+
+- Created `feat/demo-dataset` from clean, up-to-date main; no unrelated user changes found.
+- Added framework-independent typed profiles, source references, rows, exceptions, summaries,
+  counts, and run results. Profile keys, delimiter settings, and source coordinates have
+  boundary checks; processing validation/calculation services are still future work.
+- Added six synthetic branch files (three XLSX, three CSV), three header layouts, five sample
+  profiles, native XLSX dates, Windows-1251, UTF-8/BOM, two months, returns, invalid values,
+  duplicates/conflicts, leading-zero IDs, and a literal formula-like SKU for future export checks.
+- The Center workbook requires selecting Sales after Notes. Invalid Center ID 0403 occurs
+  before a valid occurrence; the Port file contains a copied North row for cross-file deduplication.
+- Added a hand-specified expected-results oracle, independent of generator/production services:
+  30 parsed = 18 accepted + 7 rejected + 5 duplicates; expected accepted total 159.53.
+- Added deterministic fixture generation without regenerating expected results. Tests verify
+  every source-row reference, all expected line/branch/month/grand totals, each rejection,
+  retained duplicate references/conflicts, encodings/sheets, and repeatable fixture bytes.
+- Local checks: Ruff lint/format passed; all 21 tests passed. Corrected Python 3.12 type-alias
+  lint findings before the first commit. No application acceptance-test completion is claimed.
+- CI now runs pytest on Windows and Linux; `.gitattributes` preserves fixture LF line endings
+  and XLSX binary bytes across platforms. Existing runtime/build/render checks remain.
+- Commits pushed: [dea9843](https://github.com/nexoradev1221/excel_csv_automation/commit/dea9843)
+  (contracts), [18c8a3d](https://github.com/nexoradev1221/excel_csv_automation/commit/18c8a3d)
+  (fixtures/oracle/tests). PR and final CI evidence are recorded with the review milestone.
+
+Next: Day 3 CSV import with explicit delimiter/encoding, physical source-row provenance,
+header preview, and actionable file-level errors. No current blocker.

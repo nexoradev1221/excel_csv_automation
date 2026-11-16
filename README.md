@@ -1,7 +1,7 @@
 # Excel and CSV Processing Automation
 
 A standalone local application for consolidating branch sales reports. **Development is in progress.**
-Only the package setup and Russian application shell are currently available. File import,
+The package setup, Russian application shell, typed contracts, and synthetic sample inputs are available. File import,
 validation, duplicate detection, consolidation, and exports are not implemented yet.
 
 See [requirements.md](requirements.md), [plan.md](plan.md), and [progress.md](progress.md)
@@ -26,6 +26,7 @@ as a Python dependency file; it is the business specification.
 ## Checks
 
 ```powershell
+uv run pytest -q
 uv run ruff check .
 uv run ruff format --check .
 uv run excel-csv-automation --check
@@ -52,3 +53,18 @@ files in ignored `local_data/`, local profiles in `profiles/`, and generated rep
 Запустите приложение командой `uv run excel-csv-automation` и откройте локальную ссылку
 в браузере. Сейчас доступен только начальный экран. Обработка файлов и скачивание отчётов
 появятся на следующих этапах разработки.
+
+## Synthetic demo inputs
+
+See [sample_data/README.md](sample_data/README.md) and `sample_data/batch.json` for the
+six inputs, ordered profiles, and deliberate errors. Rebuild them with:
+
+```powershell
+uv run python scripts/generate_sample_data.py
+```
+
+Five reusable profile examples are in `config/sample_profiles/`. The generator preserves
+the hand-specified `sample_data/expected_results.json`: 30 rows, 18 accepted, 7 rejected,
+5 duplicates, and an expected accepted total of 159.53. These are independent test targets;
+the application does not yet consolidate these files. See the sample README for rounding,
+encoding, duplicate, and provenance cases.
