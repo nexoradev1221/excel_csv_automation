@@ -42,8 +42,11 @@ Day 1 PR #2 was merged as `3cb0b5a`; main was synchronized and verified before D
 - Added deterministic fixture generation without regenerating expected results. Tests verify
   every source-row reference, all expected line/branch/month/grand totals, each rejection,
   retained duplicate references/conflicts, encodings/sheets, and repeatable fixture bytes.
-- Local checks: Ruff lint/format passed; all 21 tests passed. Corrected Python 3.12 type-alias
+- Local checks: Ruff lint/format passed; all 22 tests passed. Corrected Python 3.12 type-alias
   lint findings before the first commit. No application acceptance-test completion is claimed.
+- Initial Linux CI exposed platform-specific XLSX ZIP creator metadata. Fixed it in
+  [1dbc9f0](https://github.com/nexoradev1221/excel_csv_automation/commit/1dbc9f0), with a regression
+  test simulating Unix ZIP defaults on Windows. The 22-test local suite passed after the fix.
 - CI now runs pytest on Windows and Linux; `.gitattributes` preserves fixture LF line endings
   and XLSX binary bytes across platforms. Existing runtime/build/render checks remain.
 - Commits pushed: [dea9843](https://github.com/nexoradev1221/excel_csv_automation/commit/dea9843)
