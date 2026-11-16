@@ -7,6 +7,7 @@ Later integration tests must run the production pipeline against this same oracl
 import csv
 import json
 import runpy
+import zipfile
 from collections import defaultdict
 from datetime import datetime
 from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
@@ -194,3 +195,17 @@ def test_regeneration_is_repeatable_and_does_not_replace_the_oracle(tmp_path):
         assert json.loads(profile_path.read_text(encoding="utf-8")) == json.loads(
             checked_in.read_text(encoding="utf-8")
         )
+
+
+def test_regeneration_ignores_platform_zip_metadata(tmp_path, monkeypatch):
+    generator = runpy.run_path(str(ROOT / "scripts" / "generate_sample_data.py"))
+
+    class UnixZipInfo(zipfile.ZipInfo):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.create_system = 3  # Unix default, even when this test runs on Windows.
+
+    monkeypatch.setattr(zipfile, "ZipInfo", UnixZipInfo)
+    paths = generator["generate_sample_data"](tmp_path / "inputs", tmp_path / "profiles")
+    for path in paths:
+        assert path.read_bytes() == (SAMPLES / path.name).read_bytes(), path.name

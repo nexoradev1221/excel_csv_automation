@@ -188,6 +188,8 @@ def write_xlsx(path, settings, field_order, rows, *, add_notes=False):
                     data,
                 )
             info = zipfile.ZipInfo(name, date_time=(2000, 1, 1, 0, 0, 0))
+            # ZipInfo defaults differ on Windows and Unix; pin the archive creator OS.
+            info.create_system = 0
             target.writestr(info, data, compress_type=zipfile.ZIP_DEFLATED)
 
 
