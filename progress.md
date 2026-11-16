@@ -24,8 +24,7 @@
   this final progress-only update will also pass CI before merge. No processing features
   or acceptance-test completion are claimed yet.
 
-Next: Day 2 typed contracts, six synthetic branch fixtures, and independently specified
-expected results, then CSV/XLSX imports in dependency order. No current business-rule blocker.
+Day 1 PR #2 was merged as `3cb0b5a`; main was synchronized and verified before Day 2.
 
 ## November 16, 2026 — Day 2 (Asia/Vladivostok)
 
@@ -49,7 +48,9 @@ expected results, then CSV/XLSX imports in dependency order. No current business
   and XLSX binary bytes across platforms. Existing runtime/build/render checks remain.
 - Commits pushed: [dea9843](https://github.com/nexoradev1221/excel_csv_automation/commit/dea9843)
   (contracts), [18c8a3d](https://github.com/nexoradev1221/excel_csv_automation/commit/18c8a3d)
-  (fixtures/oracle/tests). PR and final CI evidence are recorded with the review milestone.
+  (fixtures/oracle/tests), and `b3fe18d` (CI/progress). Review and final CI evidence:
+  [PR #3](https://github.com/nexoradev1221/excel_csv_automation/pull/3). Merge only after
+  both Windows and Linux checks pass; the PR provides the canonical merge/check record.
 
 Next: Day 3 CSV import with explicit delimiter/encoding, physical source-row provenance,
 header preview, and actionable file-level errors. No current blocker.

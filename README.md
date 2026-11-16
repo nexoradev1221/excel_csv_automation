@@ -32,8 +32,9 @@ uv run ruff format --check .
 uv run excel-csv-automation --check
 ```
 
-Behavior tests and their `uv run pytest` command will be added with the processing features.
-The initial CI checks cover lint, formatting, dependency imports, and wheel packaging.
+Tests currently verify profile/provenance boundaries and the independent demo data oracle.
+CI also checks lint, formatting, dependency imports, wheel packaging, and application rendering.
+Application processing acceptance tests will be added as the services are implemented.
 
 ## Demo defaults and limitations
 
@@ -44,7 +45,7 @@ identity defaults to `(branch, transaction_id)` with configurable keys. These ar
 rules, not functionality delivered by this initial shell.
 
 No production hosting, authentication, ERP integration, inventory accounting, macro execution,
-or legacy `.xls` support is included. Sample fixtures will be synthetic. Keep real operator
+or legacy `.xls` support is included. Sample fixtures are synthetic. Keep real operator
 files in ignored `local_data/`, local profiles in `profiles/`, and generated reports in
 `outputs/`. Do not commit secrets or customer records.
 
