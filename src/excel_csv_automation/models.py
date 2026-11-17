@@ -143,3 +143,18 @@ class RunResult:
     exceptions: tuple[ProcessingException, ...] = ()
     summaries: tuple[SummaryRow, ...] = ()
     grand_total: Decimal = Decimal("0.00")
+
+
+@dataclass(frozen=True, slots=True)
+class FileImport:
+    """One file's raw import. Errors exclude the file: rows must then be empty."""
+
+    source: SourceReference
+    headers: tuple[str, ...] = ()
+    rows: tuple[SourceRow, ...] = ()
+    errors: tuple[ProcessingException, ...] = ()
+
+    def preview(self, max_rows: int = 5) -> tuple[SourceRow, ...]:
+        if max_rows < 0:
+            raise ValueError("Preview size cannot be negative")
+        return self.rows[:max_rows]
