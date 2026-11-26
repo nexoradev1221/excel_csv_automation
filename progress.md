@@ -69,11 +69,18 @@ Day 1 PR #2 was merged as `3cb0b5a`; main was synchronized and verified before D
   that retains raw values and provenance; commit [`91b3b03`](https://github.com/nexoradev1221/excel_csv_automation/commit/91b3b03) was pushed.
 - Added version-1 JSON profile save/load and stable listing, restricted profile IDs, validation,
   Unicode round trips, and atomic file replacement; commit [`826ae47`](https://github.com/nexoradev1221/excel_csv_automation/commit/826ae47) was pushed.
-- Local verification on the combined branch: Ruff lint passed, Ruff format check passed, and
-  all 68 unit/integration tests passed. Mapping/profile PR and remote CI are pending.
-- These are planned Day 3–5 deliverables completed late; no UI workflow or end-to-end acceptance
+- PR [#5](https://github.com/nexoradev1221/excel_csv_automation/pull/5) passed Linux and Windows CI
+  (including app rendering) and was merged on Nov 26.
+- Started `feat/validation` from current `main`. Added required-field, explicit-date, native Excel
+  date, formula rejection for date/numeric cells, finite decimal, precision, negative-price, and
+  exact `Decimal` validation with retained original values. Commits [`67e36d8`](https://github.com/nexoradev1221/excel_csv_automation/commit/67e36d8) and [`41be3d3`](https://github.com/nexoradev1221/excel_csv_automation/commit/41be3d3) were pushed.
+- A production-path integration test imports, maps, and validates all six synthetic files; it
+  reconciles 23 valid rows and all 7 expected invalid row references against the independent
+  oracle. Local Ruff lint/format passed and all 84 tests passed.
+- Validation PR #6 and remote CI are pending.
+- These are planned Day 3–6 deliverables completed late; no UI workflow or end-to-end acceptance
   tests are claimed. The schedule is behind its target dates, and later milestones remain.
 
-Next: complete review/CI for the mapping/profile branch, then implement required-field and
-date/number validation before deduplication and calculations. Report the Nov 28 remaining scope
-honestly; do not claim the full application is complete without its UI and exports.
+Next: complete review/CI for PR #6, then implement deduplication and financial reconciliation in
+dependency order. Report the Nov 28 remaining scope honestly; do not claim the full application
+is complete without its UI and exports.
