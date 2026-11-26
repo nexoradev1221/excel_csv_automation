@@ -158,3 +158,12 @@ class FileImport:
         if max_rows < 0:
             raise ValueError("Preview size cannot be negative")
         return self.rows[:max_rows]
+
+
+@dataclass(frozen=True, slots=True)
+class MappedFile:
+    """One successfully mapped input, or a file-level mapping error."""
+
+    source: SourceReference
+    rows: tuple[SourceRow, ...] = ()
+    errors: tuple[ProcessingException, ...] = ()
