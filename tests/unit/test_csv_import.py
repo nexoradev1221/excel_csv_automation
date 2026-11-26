@@ -106,3 +106,48 @@ def test_header_only_is_successful_empty_import():
     assert result.preview() == ()
     with pytest.raises(ValueError):
         result.preview(-1)
+
+
+@pytest.mark.parametrize(
+    "content,settings,code",
+    [
+        (b"id\n1\n\xff", {}, "decode_error"),
+        (b"id\n1", {"csv_encoding": "not-a-real-encoding"}, "unknown_encoding"),
+        (b"id\n1\x00", {}, "binary_or_wrong_encoding"),
+    ],
+)
+def test_encoding_failures_never_replace_characters_or_keep_partial_rows(content, settings, code):
+    result = import_csv(content, "encoding.csv", make_profile(**settings))
+    assert not result.rows
+    assert not result.headers
+    assert result.errors[0].reasons[0] == code
+    assert result.errors[0].source.row_number is None
+
+
+@pytest.mark.parametrize("encoding", ["utf-8", "utf-8-sig", "utf-16"])
+def test_explicit_unicode_encodings_and_bom_keep_cyrillic_headers(encoding):
+    text = "Филиал;Номер\nСевер;0001\n"
+    encoded = text.encode(encoding)
+    if encoding == "utf-8":
+        encoded = b"\xef\xbb\xbf" + encoded
+    result = import_csv(
+        encoded, "unicode.CSV", make_profile(csv_encoding=encoding, csv_delimiter=";")
+    )
+    assert not result.errors
+    assert result.headers == ("Филиал", "Номер")
+    assert result.rows[0].values == {"Филиал": "Север", "Номер": "0001"}
+
+
+def test_missing_local_file_and_wrong_file_type_have_distinct_errors(tmp_path):
+    missing = import_csv_file(tmp_path / "missing.csv", make_profile())
+    assert missing.errors[0].reasons[0] == "file_read_error"
+    wrong = import_csv(b"id\n1", "sales.xlsx", make_profile())
+    assert wrong.errors[0].reasons[0] == "unsupported_file_type"
+    assert not wrong.rows
+
+
+def test_same_named_uploads_keep_distinct_file_order_references():
+    first = import_csv(b"id\n0001", "sales.csv", make_profile(), input_index=0)
+    second = import_csv(b"id\n0001", "sales.csv", make_profile(), input_index=1)
+    assert first.rows[0].source != second.rows[0].source
+    assert first.preview(0) == ()
