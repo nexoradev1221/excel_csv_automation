@@ -55,5 +55,25 @@ Day 1 PR #2 was merged as `3cb0b5a`; main was synchronized and verified before D
   [PR #3](https://github.com/nexoradev1221/excel_csv_automation/pull/3). Merge only after
   both Windows and Linux checks pass; the PR provides the canonical merge/check record.
 
-Next: Day 3 CSV import with explicit delimiter/encoding, physical source-row provenance,
-header preview, and actionable file-level errors. No current blocker.
+## November 26, 2026 — delayed import and profile milestones
+
+- Resumed the unfinished `feat/file-import` dependency branch. Git ownership was resolved for
+  this session with command-scoped `safe.directory`; no global Git configuration was changed.
+- Added CSV regression coverage for strict decoding, BOM and Unicode encodings, missing local
+  files, wrong file types, and same-named upload ordering. Commit [`706ee59`](https://github.com/nexoradev1221/excel_csv_automation/commit/706ee59) was pushed.
+- Added selected-sheet XLSX import with source sheet/physical-row provenance, native cell values,
+  header and workbook errors, and whole-file failure behavior. Commit [`f9d6d8e`](https://github.com/nexoradev1221/excel_csv_automation/commit/f9d6d8e) was pushed.
+- PR [#4](https://github.com/nexoradev1221/excel_csv_automation/pull/4) passed Linux and Windows CI
+  (lint, format, tests, runtime dependency, wheel, and app-shell checks) and was merged on Nov 26.
+- Started `feat/mapping-profiles` from updated `main`. Added explicit canonical-column mapping
+  that retains raw values and provenance; commit [`91b3b03`](https://github.com/nexoradev1221/excel_csv_automation/commit/91b3b03) was pushed.
+- Added version-1 JSON profile save/load and stable listing, restricted profile IDs, validation,
+  Unicode round trips, and atomic file replacement; commit [`826ae47`](https://github.com/nexoradev1221/excel_csv_automation/commit/826ae47) was pushed.
+- Local verification on the combined branch: Ruff lint passed, Ruff format check passed, and
+  all 68 unit/integration tests passed. Mapping/profile PR and remote CI are pending.
+- These are planned Day 3–5 deliverables completed late; no UI workflow or end-to-end acceptance
+  tests are claimed. The schedule is behind its target dates, and later milestones remain.
+
+Next: complete review/CI for the mapping/profile branch, then implement required-field and
+date/number validation before deduplication and calculations. Report the Nov 28 remaining scope
+honestly; do not claim the full application is complete without its UI and exports.
