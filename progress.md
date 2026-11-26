@@ -85,10 +85,19 @@ Day 1 PR #2 was merged as `3cb0b5a`; main was synchronized and verified before D
   [`e78ec5e`](https://github.com/nexoradev1221/excel_csv_automation/commit/e78ec5e) were pushed.
 - The full six-file pipeline now matches the independent oracle: 18 retained valid rows, 7
   rejected rows, 5 duplicates, and the expected conflict/retained references. Ruff passed and
-  all 89 tests passed locally. Deduplication PR #7 and remote CI are pending.
-- These are planned Day 3–7 deliverables completed late; no UI workflow or end-to-end acceptance
-  tests are claimed. The schedule is behind its target dates, and later milestones remain.
+  all 89 tests passed locally.
+- PR [#7](https://github.com/nexoradev1221/excel_csv_automation/pull/7) passed Linux and Windows CI
+  and was merged on Nov 26.
+- Started `feat/reconciliation` from updated `main`. Added per-line `Decimal` multiplication,
+  `ROUND_HALF_UP` cents rounding, exact totals, sorted branch/month summaries, and row/file error
+  counts with conservation checks. Commits [`ca37349`](https://github.com/nexoradev1221/excel_csv_automation/commit/ca37349) and [`d3eb5bf`](https://github.com/nexoradev1221/excel_csv_automation/commit/d3eb5bf) were pushed.
+- The six-file financial integration test matches every accepted line, branch/month summary,
+  total (`159.53`), and audit count from the independent oracle. Ruff passed and all 96 tests
+  passed locally. Reconciliation PR #8 and remote CI are pending.
+- These are planned Day 3–8 deliverables completed late; no UI workflow or end-to-end acceptance
+  tests are claimed. The schedule is behind its target dates, and exports/UI and later milestones
+  remain.
 
-Next: complete review/CI for PR #7, then implement exact line calculations and financial reconciliation in
-dependency order. Report the Nov 28 remaining scope honestly; do not claim the full application
-is complete without its UI and exports.
+Next: complete review/CI for PR #8, then implement workbook/exception exports and the operator
+workflow in dependency order. Report the Nov 28 remaining scope honestly; do not claim the full
+application is complete without its UI and exports.
