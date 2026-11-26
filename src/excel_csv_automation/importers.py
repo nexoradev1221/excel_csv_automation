@@ -9,6 +9,10 @@ import csv
 import io
 from dataclasses import replace
 from pathlib import Path
+from zipfile import BadZipFile
+
+from openpyxl import load_workbook
+from openpyxl.utils.exceptions import InvalidFileException
 
 from excel_csv_automation.models import (
     FileImport,
@@ -133,3 +137,101 @@ def import_csv_file(
     except OSError:
         return _failure(source, "file_read_error", "Cannot read this CSV file; check its access.")
     return import_csv(data, path.name, profile, input_index=input_index)
+
+
+def import_xlsx(
+    data: bytes, filename: str, profile: MappingProfile, *, input_index: int = 0
+) -> FileImport:
+    """Read one explicitly selected XLSX sheet, preserving cell types and row provenance."""
+    base = SourceReference(filename=filename, row_number=None, input_index=input_index)
+    if Path(filename).suffix.lower() != ".xlsx":
+        return _failure(base, "unsupported_file_type", "Select an XLSX file for Excel import.")
+    if not profile.sheet_name:
+        return _failure(
+            base,
+            "sheet_not_selected",
+            "Select a worksheet in the profile before importing this Excel file.",
+        )
+
+    try:
+        book = load_workbook(io.BytesIO(data), read_only=True, data_only=False)
+    except (BadZipFile, InvalidFileException, OSError, ValueError):
+        return _failure(base, "xlsx_read_error", "Cannot read this XLSX workbook.")
+
+    try:
+        if profile.sheet_name not in book.sheetnames:
+            available = ", ".join(book.sheetnames) or "none"
+            return _failure(
+                base,
+                "sheet_not_found",
+                f"Worksheet '{profile.sheet_name}' was not found. Available sheets: {available}.",
+            )
+        sheet = book[profile.sheet_name]
+        source = replace(base, sheet_name=sheet.title)
+        iterator = sheet.iter_rows(values_only=True)
+        raw_headers = next(iterator, None)
+        if raw_headers is None or not any(
+            value is not None and str(value).strip() for value in raw_headers
+        ):
+            return _failure(
+                source,
+                "missing_header",
+                "The selected worksheet must start with a non-empty header row.",
+            )
+        headers = tuple("" if value is None else str(value).strip() for value in raw_headers)
+        if any(not header for header in headers):
+            return _failure(
+                source, "blank_header", "Every worksheet column needs a name.", headers=headers
+            )
+        if len(set(headers)) != len(headers):
+            return _failure(
+                source,
+                "duplicate_header",
+                "Worksheet header names must be unique after trimming whitespace.",
+                headers=headers,
+            )
+
+        rows = []
+        for row_number, fields in enumerate(iterator, start=2):
+            if not any(value is not None for value in fields):
+                continue
+            if len(fields) > len(headers) and any(
+                value is not None for value in fields[len(headers) :]
+            ):
+                return _failure(
+                    source,
+                    "row_width_mismatch",
+                    f"Worksheet row {row_number} contains values beyond its headers.",
+                    headers=headers,
+                    row_number=row_number,
+                    values={
+                        f"column_{index + 1}": value
+                        for index, value in enumerate(fields)
+                        if value is not None
+                    },
+                )
+            values = fields[: len(headers)] + (None,) * max(0, len(headers) - len(fields))
+            rows.append(
+                SourceRow(
+                    source=replace(source, row_number=row_number),
+                    values=dict(zip(headers, values, strict=True)),
+                )
+            )
+        return FileImport(source=source, headers=headers, rows=tuple(rows))
+    finally:
+        book.close()
+
+
+def import_xlsx_file(
+    path: str | Path, profile: MappingProfile, *, input_index: int = 0
+) -> FileImport:
+    """Read a local XLSX without writing or changing its source file."""
+    path = Path(path)
+    source = SourceReference(filename=path.name, row_number=None, input_index=input_index)
+    if path.suffix.lower() != ".xlsx":
+        return _failure(source, "unsupported_file_type", "Select an XLSX file for Excel import.")
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return _failure(source, "file_read_error", "Cannot read this Excel file; check its access.")
+    return import_xlsx(data, path.name, profile, input_index=input_index)
