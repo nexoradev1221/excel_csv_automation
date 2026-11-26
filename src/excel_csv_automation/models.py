@@ -177,3 +177,11 @@ class ValidationResult:
     accepted: tuple[NormalizedRow, ...] = ()
     rejected: tuple[ProcessingException, ...] = ()
     file_errors: tuple[ProcessingException, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
+class DeduplicationResult:
+    """Stable first-occurrence rows and later duplicate exceptions."""
+
+    retained: tuple[NormalizedRow, ...] = ()
+    duplicates: tuple[ProcessingException, ...] = ()
