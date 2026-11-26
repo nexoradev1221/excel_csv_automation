@@ -77,10 +77,18 @@ Day 1 PR #2 was merged as `3cb0b5a`; main was synchronized and verified before D
 - A production-path integration test imports, maps, and validates all six synthetic files; it
   reconciles 23 valid rows and all 7 expected invalid row references against the independent
   oracle. Local Ruff lint/format passed and all 84 tests passed.
-- Validation PR #6 and remote CI are pending.
-- These are planned Day 3–6 deliverables completed late; no UI workflow or end-to-end acceptance
+- PR [#6](https://github.com/nexoradev1221/excel_csv_automation/pull/6) passed Linux and Windows CI
+  and was merged on Nov 26.
+- Started `feat/deduplication` from updated `main`. Added stable ordering by file index and physical
+  row, configurable business keys, retained-row provenance, and conflict reporting. Commits
+  [`79ba32e`](https://github.com/nexoradev1221/excel_csv_automation/commit/79ba32e) and
+  [`e78ec5e`](https://github.com/nexoradev1221/excel_csv_automation/commit/e78ec5e) were pushed.
+- The full six-file pipeline now matches the independent oracle: 18 retained valid rows, 7
+  rejected rows, 5 duplicates, and the expected conflict/retained references. Ruff passed and
+  all 89 tests passed locally. Deduplication PR #7 and remote CI are pending.
+- These are planned Day 3–7 deliverables completed late; no UI workflow or end-to-end acceptance
   tests are claimed. The schedule is behind its target dates, and later milestones remain.
 
-Next: complete review/CI for PR #6, then implement deduplication and financial reconciliation in
+Next: complete review/CI for PR #7, then implement exact line calculations and financial reconciliation in
 dependency order. Report the Nov 28 remaining scope honestly; do not claim the full application
 is complete without its UI and exports.
