@@ -93,11 +93,18 @@ Day 1 PR #2 was merged as `3cb0b5a`; main was synchronized and verified before D
   counts with conservation checks. Commits [`ca37349`](https://github.com/nexoradev1221/excel_csv_automation/commit/ca37349) and [`d3eb5bf`](https://github.com/nexoradev1221/excel_csv_automation/commit/d3eb5bf) were pushed.
 - The six-file financial integration test matches every accepted line, branch/month summary,
   total (`159.53`), and audit count from the independent oracle. Ruff passed and all 96 tests
-  passed locally. Reconciliation PR #8 and remote CI are pending.
-- These are planned Day 3–8 deliverables completed late; no UI workflow or end-to-end acceptance
-  tests are claimed. The schedule is behind its target dates, and exports/UI and later milestones
-  remain.
+  passed locally.
+- PR [#8](https://github.com/nexoradev1221/excel_csv_automation/pull/8) passed Linux and Windows CI
+  and was merged on Nov 26.
+- Started the focused `feat/report-exports` branch from merged `main`. Added formatted in-memory
+  `Cleaned_Data`, `Summary`, `Exceptions`, and `Run_Info` sheets plus UTF-8 BOM exception CSV with
+  formula-safe text. Commits [`e86fb5c`](https://github.com/nexoradev1221/excel_csv_automation/commit/e86fb5c) and [`76dfa27`](https://github.com/nexoradev1221/excel_csv_automation/commit/76dfa27) were pushed.
+- Reopened outputs match every accepted line and summary, all 12 expected exceptions, and total
+  `159.53`; no generated workbook cell is a formula. Ruff passed and all 100 tests passed locally.
+  Export PR #9 and remote CI are pending.
+- These are planned Day 3–9 deliverables completed late; no operator UI or end-to-end acceptance
+  tests are claimed. The schedule is behind its target dates, and UI and later milestones remain.
 
-Next: complete review/CI for PR #8, then implement workbook/exception exports and the operator
-workflow in dependency order. Report the Nov 28 remaining scope honestly; do not claim the full
-application is complete without its UI and exports.
+Next: complete review/CI for PR #9, then implement the operator workflow in dependency order.
+Report the Nov 28 remaining scope honestly; do not claim the full application is complete without
+its UI and acceptance evidence.
