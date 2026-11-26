@@ -167,3 +167,13 @@ class MappedFile:
     source: SourceReference
     rows: tuple[SourceRow, ...] = ()
     errors: tuple[ProcessingException, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
+class ValidationResult:
+    """Partition mapped rows into normalized rows and row/file exceptions."""
+
+    source: SourceReference
+    accepted: tuple[NormalizedRow, ...] = ()
+    rejected: tuple[ProcessingException, ...] = ()
+    file_errors: tuple[ProcessingException, ...] = ()
