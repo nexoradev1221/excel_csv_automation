@@ -1,16 +1,29 @@
 # Excel and CSV Processing Automation
 
-A standalone local application for consolidating branch sales reports. **Development is in progress.**
-The package setup, Russian application shell, typed contracts, and synthetic sample inputs are available. File import,
-validation, duplicate detection, consolidation, and exports are not implemented yet.
+A local Streamlit application that consolidates synthetic branch sales files into an auditable
+workbook. The application is intended for a portfolio demonstration. Do not use it for live
+business decisions without validating the documented assumptions against real source reports.
 
-See [requirements.md](requirements.md), [plan.md](plan.md), and [progress.md](progress.md)
-for scope, the November 15-28 implementation schedule, and actual verification results.
+## Features
 
-## Setup
+- Import multiple CSV and XLSX files. Choose CSV delimiter and encoding, and select an XLSX sheet.
+- Map source headers to date, branch, SKU, quantity, unit price, and transaction ID. Preview source
+  and mapped rows before processing.
+- Reuse or save local mapping profiles in `profiles/`; bundled examples are in
+  `config/sample_profiles/`.
+- Validate required fields, explicit date formats, numeric values, finite decimals, decimal
+  precision, and nonnegative unit prices. Source rows and rejection reasons remain reviewable.
+- Find duplicates across the batch using a configurable canonical key. Keep the first valid row by
+  file and physical row order; report duplicates and payload conflicts.
+- Calculate each accepted line using `Decimal` and round once to cents with `ROUND_HALF_UP`. Export
+  branch/month summaries, accepted detail, audit counts, and exception references.
+- Download `consolidated_sales.xlsx` and a UTF-8 BOM `exceptions.csv`. Formula-like text is kept
+  literal in the workbook and escaped in the CSV.
 
-Install Python 3.12 and [uv](https://docs.astral.sh/uv/getting-started/installation/), then run
-from this repository:
+## Setup and launch
+
+Install Python 3.12 and [uv](https://docs.astral.sh/uv/getting-started/installation/), then run from
+the repository root:
 
 ```powershell
 uv sync --frozen
@@ -18,10 +31,24 @@ uv run excel-csv-automation --check
 uv run excel-csv-automation
 ```
 
-Open the localhost URL printed by Streamlit. The launcher binds to `127.0.0.1`.
-No platform account, credentials, paid services, or other portfolio project is required.
-`uv.lock` pins application and development dependencies. Do not edit `requirements.md`
-as a Python dependency file; it is the business specification.
+Open the localhost URL printed by Streamlit. The server binds to `127.0.0.1`; input files are
+processed in memory and are not sent to an external service. Local profiles are written under
+`profiles/`, which is ignored by Git. The application does not overwrite source files.
+
+## Operator workflow
+
+1. Upload the branch CSV/XLSX files together.
+2. Select a sample or local profile for each file. For XLSX, select the correct worksheet; for CSV,
+   choose delimiter and encoding.
+3. Review the source preview and map the six canonical fields to the source headers. Save a profile
+   if the mapping should be reused later.
+4. Choose the duplicate key for the batch. Review the file-level errors before processing. If one or
+   more files failed, the application requires the operator to opt in before processing only the
+   readable files.
+5. Review row counts, totals, summaries, and exceptions. Download both reports.
+
+The supplied demo inputs are synthetic. Start with all six files and their corresponding sample
+profiles to reproduce the independent acceptance oracle.
 
 ## Checks
 
@@ -32,40 +59,47 @@ uv run ruff format --check .
 uv run excel-csv-automation --check
 ```
 
-Tests currently verify profile/provenance boundaries and the independent demo data oracle.
-CI also checks lint, formatting, dependency imports, wheel packaging, and application rendering.
-Application processing acceptance tests will be added as the services are implemented.
+The tests cover CSV/XLSX import, profile persistence, mapping, validation, duplicate retention,
+financial calculations, and reopened workbook/CSV outputs. The CI workflow also checks dependency
+imports, wheel packaging, and Streamlit rendering on Windows and Linux. See `progress.md` for the
+actual results and PR/CI records; application acceptance is only claimed when supported by those
+recorded results.
 
-## Demo defaults and limitations
+## Demo rules and limitations
 
-The agreed demo defaults in `plan.md` assume one currency per batch, explicit input date
-and numeric formats, signed quantities for returns, and nonnegative unit prices. Monetary
-calculations will use `Decimal` with two-place `ROUND_HALF_UP` rounding per line. Duplicate
-identity defaults to `(branch, transaction_id)` with configurable keys. These are planned
-rules, not functionality delivered by this initial shell.
+- Duplicate identity defaults to `(branch, transaction_id)`. A different key may be chosen for the
+  full batch. The first valid occurrence is retained, and a later conflicting payload is flagged.
+- Dates must follow the selected format unless the XLSX cell contains a native date. Numbers use
+  the selected decimal separator and configured precision. Signed quantities represent returns;
+  unit prices cannot be negative. One currency per batch is assumed.
+- XLSX formulas are not evaluated. Formula cells in date/numeric fields are rejected; text cells
+  are exported literally.
+- Profiles and reports are local. The application has no authentication, hosted service, ERP
+  integration, inventory accounting, macro execution, or legacy `.xls` support.
+- Fixtures contain synthetic data only. Keep operator files in ignored `local_data/`, profiles in
+  ignored `profiles/`, and local outputs in ignored `outputs/`. Never commit credentials or genuine
+  customer records.
 
-No production hosting, authentication, ERP integration, inventory accounting, macro execution,
-or legacy `.xls` support is included. Sample fixtures are synthetic. Keep real operator
-files in ignored `local_data/`, local profiles in `profiles/`, and generated reports in
-`outputs/`. Do not commit secrets or customer records.
+## Synthetic demo data
 
-## Для оператора
-
-Запустите приложение командой `uv run excel-csv-automation` и откройте локальную ссылку
-в браузере. Сейчас доступен только начальный экран. Обработка файлов и скачивание отчётов
-появятся на следующих этапах разработки.
-
-## Synthetic demo inputs
-
-See [sample_data/README.md](sample_data/README.md) and `sample_data/batch.json` for the
-six inputs, ordered profiles, and deliberate errors. Rebuild them with:
+See [sample_data/README.md](sample_data/README.md) and `sample_data/batch.json` for the six inputs,
+profiles, deliberate errors, and hand-specified expected results. Rebuild the inputs with:
 
 ```powershell
 uv run python scripts/generate_sample_data.py
 ```
 
-Five reusable profile examples are in `config/sample_profiles/`. The generator preserves
-the hand-specified `sample_data/expected_results.json`: 30 rows, 18 accepted, 7 rejected,
-5 duplicates, and an expected accepted total of 159.53. These are independent test targets;
-the application does not yet consolidate these files. See the sample README for rounding,
-encoding, duplicate, and provenance cases.
+The independent oracle specifies 30 input rows, 18 accepted rows, 7 rejected rows, 5 duplicates,
+and an accepted grand total of `159.53`.
+
+## Для оператора
+
+Загрузите CSV- и XLSX-файлы филиалов, выберите профиль для каждого файла, проверьте лист Excel,
+кодировку и разделитель CSV, затем сопоставьте исходные заголовки с шестью обязательными полями.
+Перед обработкой проверьте предварительный просмотр и ключ дублей. Если есть ошибки файлов,
+частичная обработка запускается только после явного выбора оператора. После обработки проверьте
+количество принятых строк, итоги и список исключений, затем скачайте обе версии отчёта.
+
+Профили сохраняются локально. Примеры находятся в `config/sample_profiles/`. Входные данные
+демонстрации синтетические; для реальных отчётов сначала проверьте допущения о датах, денежных
+значениях, дублях и возвратах.
