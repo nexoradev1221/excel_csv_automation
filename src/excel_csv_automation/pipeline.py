@@ -1,5 +1,6 @@
 """Batch orchestration from uploaded source bytes through report-ready results."""
 
+import json
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
@@ -74,5 +75,37 @@ def process_batch(
         return BatchOutcome(validations=validations, result=None)
 
     duplicate_result = deduplicate_rows(accepted_rows, run_profile)
-    result = calculate_run(run_id or _new_run_id(), validations, duplicate_result)
+    profile_settings = [
+        {
+            "file": item.filename,
+            "profile_id": item.profile.profile_id,
+            "column_map": dict(item.profile.column_map),
+            "csv_delimiter": item.profile.csv_delimiter,
+            "csv_encoding": item.profile.csv_encoding,
+            "date_format": item.profile.date_format,
+            "decimal_separator": item.profile.decimal_separator,
+            "sheet_name": item.profile.sheet_name,
+            "quantity_decimal_places": item.profile.quantity_decimal_places,
+            "price_decimal_places": item.profile.price_decimal_places,
+        }
+        for item in files
+    ]
+    excluded_files = [
+        {"file": error.source.filename, "reasons": list(error.reasons)}
+        for item in validations
+        for error in item.file_errors
+    ]
+    metadata = {
+        "duplicate_key": ", ".join(run_profile.duplicate_key),
+        "duplicate_policy": (
+            "First valid occurrence by uploaded file order and physical source row; "
+            "conflicting payloads are flagged."
+        ),
+        "profile_settings": json.dumps(profile_settings, ensure_ascii=False, sort_keys=True),
+        "excluded_files": json.dumps(excluded_files, ensure_ascii=False, sort_keys=True),
+        "partial_processing": str(allow_partial).lower(),
+    }
+    result = calculate_run(
+        run_id or _new_run_id(), validations, duplicate_result, run_metadata=metadata
+    )
     return BatchOutcome(validations=validations, result=result)

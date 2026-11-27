@@ -43,6 +43,11 @@ def test_batch_with_file_error_requires_explicit_partial_opt_in():
     assert partial.result.counts.accepted == 2
     assert partial.result.counts.rejected == 2
     assert partial.result.counts.duplicates == 1
+    metadata = partial.result.run_metadata
+    assert metadata["duplicate_key"] == "branch, transaction_id"
+    assert metadata["partial_processing"] == "true"
+    assert json.loads(metadata["profile_settings"])[1]["profile_id"] == "russian_csv"
+    assert json.loads(metadata["excluded_files"])[0]["file"] == "bad.csv"
 
 
 def test_empty_batch_and_empty_duplicate_key_are_rejected():

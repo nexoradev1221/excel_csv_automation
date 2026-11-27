@@ -143,6 +143,7 @@ class RunResult:
     exceptions: tuple[ProcessingException, ...] = ()
     summaries: tuple[SummaryRow, ...] = ()
     grand_total: Decimal = Decimal("0.00")
+    run_metadata: Mapping[str, str] = field(default_factory=dict)
 
 
 @dataclass(frozen=True, slots=True)

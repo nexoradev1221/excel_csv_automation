@@ -1,7 +1,7 @@
 """Exact line totals, summaries, and run-level reconciliation."""
 
 from collections import defaultdict
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from decimal import ROUND_HALF_UP, Decimal, localcontext
 
 from excel_csv_automation.models import (
@@ -41,6 +41,8 @@ def calculate_run(
     run_id: str,
     validations: Iterable[ValidationResult],
     deduplication: DeduplicationResult,
+    *,
+    run_metadata: Mapping[str, str] | None = None,
 ) -> RunResult:
     """Calculate accepted lines and summaries, retaining exceptions and audit counts."""
     if not run_id.strip():
@@ -94,4 +96,5 @@ def calculate_run(
         exceptions=tuple(exceptions),
         summaries=summaries,
         grand_total=grand_total,
+        run_metadata=dict(run_metadata or {}),
     )

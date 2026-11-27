@@ -60,6 +60,13 @@ def sample_run():
         "export-test",
         validations,
         DeduplicationResult(retained=(row,), duplicates=(duplicate,)),
+        run_metadata={
+            "duplicate_key": "branch, transaction_id",
+            "duplicate_policy": "first valid row",
+            "profile_settings": '[{"profile_id":"demo"}]',
+            "excluded_files": "[]",
+            "partial_processing": "false",
+        },
     )
 
 
@@ -81,6 +88,13 @@ def test_xlsx_report_has_all_sheets_formats_and_literal_untrusted_text():
     assert cleaned["H2"].data_type == "s"
     assert book["Summary"]["C2"].value == 2.01
     assert book["Exceptions"].max_row == 4
+    run_info = {
+        book["Run_Info"].cell(row, 1).value: book["Run_Info"].cell(row, 2).value
+        for row in range(2, book["Run_Info"].max_row + 1)
+    }
+    assert run_info["duplicate_key"] == "branch, transaction_id"
+    assert run_info["profile_settings"] == '[{"profile_id":"demo"}]'
+    assert run_info["excluded_files"] == "[]"
     assert all(
         cell.data_type != "f"
         for sheet in book.worksheets

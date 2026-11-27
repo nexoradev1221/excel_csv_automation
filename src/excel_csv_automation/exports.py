@@ -185,6 +185,10 @@ def export_report_xlsx(result: RunResult) -> bytes:
     ):
         _set_literal(run_info.cell(run_info.max_row + 1, 1), name)
         _set_literal(run_info.cell(run_info.max_row, 2), value)
+    for name, value in sorted(result.run_metadata.items()):
+        output_row = run_info.max_row + 1
+        _set_literal(run_info.cell(output_row, 1), name)
+        _set_literal(run_info.cell(output_row, 2), value)
     _format_table(run_info, currency_columns=(2,))
 
     output = io.BytesIO()
