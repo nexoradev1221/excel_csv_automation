@@ -16,7 +16,7 @@ def main() -> int:
         for module_name in ("streamlit", "pandas", "openpyxl"):
             module = importlib.import_module(module_name)
             print(f"{module_name}: {module.__version__}")
-        print("Environment ready. Transaction processing is not implemented yet.")
+        print("Environment ready. Start the app to process CSV and XLSX files.")
         return 0
 
     from streamlit.web import cli
